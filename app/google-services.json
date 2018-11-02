@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "589621725458",
+    "firebase_url": "https://hobipedia-b161b.firebaseio.com",
+    "project_id": "hobipedia-b161b",
+    "storage_bucket": "hobipedia-b161b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589621725458:android:41fe67e93398222d",
+        "android_client_info": {
+          "package_name": "id.hobipedia.hobipedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589621725458-gqs407jugk8keik093e7h8cipg1aajc3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.hobipedia.hobipedia",
+            "certificate_hash": "3df2ccd73e2c0f3b14be72a0c9667b1be38656a9"
+          }
+        },
+        {
+          "client_id": "589621725458-5e8tcqvqg0cco57olotfjab7j03ptjc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHa9e4JkiLZcxHzN7arbvQDC7DPAfCjZk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589621725458-5e8tcqvqg0cco57olotfjab7j03ptjc4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
