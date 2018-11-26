@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.widget.Toast
 import id.hobipedia.hobipedia.extension.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -54,8 +55,7 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         mProgressDialog.dismiss()
                         if (task.isSuccessful) {
-                            toast("Login berhasil")
-                            getDataUser()
+                            checkIfEmailVerified()
                         } else {
                             val errorCode = (task.exception as FirebaseAuthException).errorCode
                             when (errorCode) {
@@ -111,6 +111,17 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+        }
+    }
+
+    private fun checkIfEmailVerified() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user!!.isEmailVerified) {
+            Toast.makeText(this@LoginActivity, "Login berhasil", Toast.LENGTH_SHORT).show()
+            getDataUser()
+        } else {
+            FirebaseAuth.getInstance().signOut()
+            Toast.makeText(this@LoginActivity, "Email belum terverifikasi, silakan cek email Anda.", Toast.LENGTH_SHORT).show()
         }
     }
 

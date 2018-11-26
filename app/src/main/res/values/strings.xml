@@ -11,4 +11,8 @@
     <string name="nama_lengkap">Nama Lengkap</string>
     <string name="konfirmasi_password">Konfirmasi Password</string>
     <string name="register">Register</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="detail"><u>Detail</u></string>
+    <string name="buat_event">Buat Event</string>
 </resources>

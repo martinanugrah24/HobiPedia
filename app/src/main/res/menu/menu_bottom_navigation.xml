@@ -7,12 +7,12 @@
         android:title="@string/home" />
 
     <item
-        android:id="@+id/navigation_info_sehat"
+        android:id="@+id/navigation_my_events"
         android:icon="@drawable/ic_event_note_24px"
         android:title="@string/my_events" />
 
     <item
-        android:id="@+id/navigation_emergency"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_account_circle_24px"
         android:title="@string/profile" />
 

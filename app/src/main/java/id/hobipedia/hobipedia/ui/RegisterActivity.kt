@@ -2,8 +2,10 @@ package id.hobipedia.hobipedia.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.widget.Toast
 import id.hobipedia.hobipedia.extension.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -81,12 +83,14 @@ class RegisterActivity : AppCompatActivity() {
                     prefs["email"] = email
                     prefs["noTelp"] = alamat
 
-                    mAuth.signOut()
-
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
+//                    mAuth.signOut()
+//
+//                    val intent = Intent(this, LoginActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//                    startActivity(intent)
+//                    finish()
+                    sendEmailVerification()
+                    FirebaseAuth.getInstance().signOut()
                 }
 
             } else {
@@ -100,6 +104,26 @@ class RegisterActivity : AppCompatActivity() {
                     else ->
                         toast("" + (task.exception as FirebaseAuthException).message)
                 }
+            }
+        }
+    }
+
+    private fun sendEmailVerification() {
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.sendEmailVerification()?.addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                val snackbar = Snackbar
+                        .make(constraintLayout, "Email verifikasi dikirim ke ${user.email}", Snackbar.LENGTH_LONG)
+                        .setAction("BUKA EMAIL") {
+                            val intent = Intent(Intent.ACTION_MAIN)
+                            intent.addCategory(Intent.CATEGORY_APP_EMAIL)
+                            startActivity(Intent.createChooser(intent, "Choose email client"))
+                        }
+                snackbar.show()
+            } else {
+                Toast.makeText(baseContext,
+                        "Gagal mengirim email verifikasi",
+                        Toast.LENGTH_SHORT).show()
             }
         }
     }

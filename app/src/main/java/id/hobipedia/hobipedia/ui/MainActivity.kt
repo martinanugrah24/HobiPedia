@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity() {
                 updateFragment(HomeFragment())
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_info_sehat -> {
+            R.id.navigation_my_events -> {
                 supportActionBar?.title = "My Events"
                 updateFragment(MyEventsFragment())
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_emergency -> {
+            R.id.navigation_profile -> {
                 supportActionBar?.title = "Profile"
                 updateFragment(ProfileFragment())
                 return@OnNavigationItemSelectedListener true

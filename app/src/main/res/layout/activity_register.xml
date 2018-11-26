@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/constraintLayout"
     android:background="@drawable/gradient_background_selector"
     tools:context=".ui.RegisterActivity">
 
@@ -19,7 +20,6 @@
         tools:ignore="ContentDescription" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"

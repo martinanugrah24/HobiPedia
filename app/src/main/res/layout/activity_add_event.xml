@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.add_event.AddEventActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_white_1000">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEventName"
+                style="@style/Widget.Design.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextEventName"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Event"
+                    android:inputType="textCapSentences" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEventAddress"
+                style="@style/Widget.Design.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextEventAddress"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Alamat"
+                    android:inputType="none" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEventDate"
+                style="@style/Widget.Design.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextEventDate"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Tanggal"
+                    android:inputType="date" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEventTime"
+                style="@style/Widget.Design.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextEventTime"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Pukul"
+                    android:inputType="time" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutEventPhone"
+                style="@style/Widget.Design.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextEventPhone"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Telepon"
+                    android:inputType="phone" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="Minimal &amp; Maksimal Anggota" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editTextEventMaxMember"
+                    android:layout_width="65dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/square_edit_text_state"
+                    android:hint="Min"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center" />
+
+                <EditText
+                    android:id="@+id/editTextEventMinMember"
+                    android:layout_width="65dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/square_edit_text_state"
+                    android:hint="Max"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="Deskripsi" />
+
+            <EditText
+                android:id="@+id/editTextEventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="21dp"
+                android:background="@drawable/square_edit_text_state"
+                android:gravity="top|start"
+                android:hint="Tulis deskripsi..."
+                android:inputType="textMultiLine|textCapSentences"
+                android:lines="3"
+                android:overScrollMode="always"
+                android:padding="8dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="10"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="Upload Foto" />
+
+            <ImageView
+                android:id="@+id/imageViewUploadFoto"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="21dp"
+                android:foregroundGravity="center"
+                android:scaleType="fitStart"
+                android:src="@drawable/upload_foto" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:textColor="@color/md_white_1000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
