@@ -1,5 +1,7 @@
 package id.hobipedia.hobipedia.ui.category
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,11 +12,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import id.hobipedia.hobipedia.R
+import id.hobipedia.hobipedia.extension.toast
 import id.hobipedia.hobipedia.model.Event
+import id.hobipedia.hobipedia.ui.chat.ChatActivity
+import id.hobipedia.hobipedia.ui.event_detail.EventDetailActivity
+import id.hobipedia.hobipedia.util.Constant
 import id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET
 
 class CategoryAdapter(
-        val items: ArrayList<Event>, val listener: CategoryListener
+        val items: ArrayList<Event>, val listener: CategoryListener, val mContext: Context
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,7 +45,7 @@ class CategoryAdapter(
         }
 
         holder.joinButton.setOnClickListener {
-            listener.onItemClick(item.eventId, item.name, item.latitude, item.longitude)
+            listener.onJoinClick(item.eventId, item.name, item.latitude, item.longitude)
         }
 
         holder.detailButton.setOnClickListener {

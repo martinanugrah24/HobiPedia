@@ -1,5 +1,7 @@
 package id.hobipedia.hobipedia.model;
 
+import java.util.ArrayList;
+
 import static id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET;
 import static id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET_DOUBLE;
 import static id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET_INT;
@@ -20,11 +22,12 @@ public class Event {
     private String time = DEFAULT_NOT_SET;
     private int maxMember = DEFAULT_NOT_SET_INT;
     private int minMember = DEFAULT_NOT_SET_INT;
+    private ArrayList<String> members = new ArrayList<>();
 
     public Event() {
     }
 
-    public Event(String address, String category, String description, String eventId, double latitude, double longitude, String name, String ownerId, String phone, String photoUrl, String date, String time, int maxMember, int minMember) {
+    public Event(String address, String category, String description, String eventId, double latitude, double longitude, String name, String ownerId, String phone, String photoUrl, String date, String time, int maxMember, int minMember, ArrayList<String> members) {
         this.address = address;
         this.category = category;
         this.description = description;
@@ -39,6 +42,7 @@ public class Event {
         this.time = time;
         this.maxMember = maxMember;
         this.minMember = minMember;
+        this.members = members;
     }
 
     public String getAddress() {
@@ -151,5 +155,13 @@ public class Event {
 
     public void setMinMember(int minMember) {
         this.minMember = minMember;
+    }
+
+    public ArrayList<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(ArrayList<String> members) {
+        this.members = members;
     }
 }

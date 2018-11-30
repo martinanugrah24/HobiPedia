@@ -16,12 +16,12 @@ import id.hobipedia.hobipedia.util.Constant.KEY.KEY_ID_EVENT
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_NAMA_EVENT
 import kotlinx.android.synthetic.main.item_event_saya.view.*
 
-class EventSayaAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
-    : RecyclerView.Adapter<EventSayaAdapter.MyViewHolder>() {
+class EventLainAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
+    : RecyclerView.Adapter<EventLainAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_event_saya, parent, false)
+                .inflate(R.layout.item_event_lain, parent, false)
         return MyViewHolder(view)
     }
 

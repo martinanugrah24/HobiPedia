@@ -19,6 +19,8 @@ import id.hobipedia.hobipedia.ui.event_detail.EventDetailActivity
 import id.hobipedia.hobipedia.util.Constant.CHILD.*
 import id.hobipedia.hobipedia.util.Constant.KEY.*
 import kotlinx.android.synthetic.main.activity_category.*
+import id.hobipedia.hobipedia.ui.chat.ChatActivity
+import java.util.HashMap
 
 class CategoryActivity : AppCompatActivity(), CategoryListener {
 
@@ -86,7 +88,7 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = getReverseLinearLayoutManager()
-        mAdapter = CategoryAdapter(mEvents, this)
+        mAdapter = CategoryAdapter(mEvents, this, this)
         recyclerView.adapter = mAdapter
     }
 
@@ -101,6 +103,29 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
 
     override fun onItemClick(id: String, name: String, lat: Double, lng: Double) {
         navigateToEventDetailActivity(id, name, lat, lng)
+    }
+
+    override fun onJoinClick(id: String, name: String, lat: Double, lng: Double) {
+        var count: Int
+        val map = HashMap<String, Any?>()
+        mDatabaseReference?.child(CHILD_EVENTS)?.child(id)?.child("members")?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                count = (p0.childrenCount - 1).toInt().inc()
+                map.put(count.toString(), mFirebaseAuth?.currentUser?.uid)
+                mDatabaseReference?.child(CHILD_EVENTS)?.child(id)?.child("members")?.updateChildren(map)
+            }
+
+        })
+        val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra(KEY_ID_EVENT, id)
+        intent.putExtra(KEY_NAMA_EVENT, name)
+        intent.putExtra("lat", lat)
+        intent.putExtra("lng", lng)
+        startActivity(intent)
+        toast("Berhasil join")
     }
 
     private fun navigateToAddEventActivity(categoryName: String) {
@@ -148,9 +173,10 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
                 }
                 for (childDataSnapshot in p0.children) {
                     val item = childDataSnapshot.getValue(Event::class.java)
-                    if (item!!.category.equals(categoryName)) {
-                        if (!(item.ownerId.equals(mFirebaseUser?.uid)))
+                    if (item!!.category == categoryName) {
+                        if (item.ownerId != mFirebaseUser?.uid && !item.members.contains(mFirebaseAuth?.currentUser?.uid)) {
                             mEvents.add(item)
+                        }
                     }
                     mAdapter?.notifyDataSetChanged()
                     updateUI()

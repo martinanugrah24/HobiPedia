@@ -198,7 +198,7 @@ class AddEventActivity : AppCompatActivity() {
                             eventId: String?, eventName: String, eventPhoneNumber: String, eventDate: String,
                             eventTime: String, eventMaxMember: String, eventMinMember: String) {
         showProgressDialog()
-        val event = Event(eventAddress, categoryName, eventDescription, eventId, mLatitude, mLongitude, eventName, mFirebaseUser!!.uid, eventPhoneNumber, DEFAULT_NOT_SET, eventDate, eventTime, eventMaxMember.toInt(), eventMinMember.toInt())
+        val event = Event(eventAddress, categoryName, eventDescription, eventId, mLatitude, mLongitude, eventName, mFirebaseUser!!.uid, eventPhoneNumber, DEFAULT_NOT_SET, eventDate, eventTime, eventMaxMember.toInt(), eventMinMember.toInt(), null)
         mDatabaseReference?.child(CHILD_EVENTS)?.child(eventId.toString())?.setValue(event)
                 ?.addOnSuccessListener {
                     alertDialog.dismiss()
