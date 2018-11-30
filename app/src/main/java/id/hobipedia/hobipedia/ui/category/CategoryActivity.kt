@@ -85,7 +85,7 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = getDefaultLinearLayoutManager()
+        recyclerView.layoutManager = getReverseLinearLayoutManager()
         mAdapter = CategoryAdapter(mEvents, this)
         recyclerView.adapter = mAdapter
     }
@@ -99,8 +99,8 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         }
     }
 
-    override fun onItemClick(id: String) {
-        navigateToEventDetailActivity(id)
+    override fun onItemClick(id: String, name: String, lat: Double, lng: Double) {
+        navigateToEventDetailActivity(id, name, lat, lng)
     }
 
     private fun navigateToAddEventActivity(categoryName: String) {
@@ -109,9 +109,12 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         startActivity(intent)
     }
 
-    private fun navigateToEventDetailActivity(eventId: String) {
+    private fun navigateToEventDetailActivity(eventId: String, eventName: String, lat: Double, lng: Double) {
         val intent = Intent(this, EventDetailActivity::class.java)
         intent.putExtra(KEY_ID_EVENT, eventId)
+        intent.putExtra(KEY_NAMA_EVENT, eventName)
+        intent.putExtra("lat", lat)
+        intent.putExtra("lng", lng)
         startActivity(intent)
     }
 
@@ -146,7 +149,8 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
                 for (childDataSnapshot in p0.children) {
                     val item = childDataSnapshot.getValue(Event::class.java)
                     if (item!!.category.equals(categoryName)) {
-                        mEvents.add(item)
+                        if (!(item.ownerId.equals(mFirebaseUser?.uid)))
+                            mEvents.add(item)
                     }
                     mAdapter?.notifyDataSetChanged()
                     updateUI()

@@ -185,7 +185,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/editTextEventMaxMember"
+                    android:id="@+id/editTextEventMinMember"
                     android:layout_width="65dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="21dp"
@@ -196,7 +196,7 @@
                     android:textAlignment="center" />
 
                 <EditText
-                    android:id="@+id/editTextEventMinMember"
+                    android:id="@+id/editTextEventMaxMember"
                     android:layout_width="65dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="8dp"
@@ -283,6 +283,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

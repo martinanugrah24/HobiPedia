@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.MenuItem
+import android.view.View
 import android.widget.ScrollView
 import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.android.gms.tasks.Continuation
@@ -31,6 +32,7 @@ import id.hobipedia.hobipedia.extension.toast
 import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.util.Constant
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
+import id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_add_event.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
@@ -60,15 +62,16 @@ class AddEventActivity : AppCompatActivity() {
     private var mTimePickerDialog: TimePickerDialog? = null
     private var mTime = ""
 
-    private var imagePath: String = ""
+    private var imagePath: String? = null
     private var imageUri: Uri? = null
-    private var mImageDownloadUrl: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
 
         setupFirebase()
+        progressBar.visibility = View.GONE
         mActionBar = supportActionBar
         mActionBar?.setDisplayHomeAsUpEnabled(true)
         mExtras = intent.extras
@@ -88,6 +91,7 @@ class AddEventActivity : AppCompatActivity() {
         }
 
         editTextEventAddress.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
             PLACE_PICKER_REQUEST = 1
             showPlacePicker()
         }
@@ -194,7 +198,7 @@ class AddEventActivity : AppCompatActivity() {
                             eventId: String?, eventName: String, eventPhoneNumber: String, eventDate: String,
                             eventTime: String, eventMaxMember: String, eventMinMember: String) {
         showProgressDialog()
-        val event = Event(eventAddress, categoryName, eventDescription, eventId, mLatitude, mLongitude, eventName, mFirebaseUser!!.uid, eventPhoneNumber, mImageDownloadUrl, eventDate, eventTime, eventMaxMember.toInt(), eventMinMember.toInt())
+        val event = Event(eventAddress, categoryName, eventDescription, eventId, mLatitude, mLongitude, eventName, mFirebaseUser!!.uid, eventPhoneNumber, DEFAULT_NOT_SET, eventDate, eventTime, eventMaxMember.toInt(), eventMinMember.toInt())
         mDatabaseReference?.child(CHILD_EVENTS)?.child(eventId.toString())?.setValue(event)
                 ?.addOnSuccessListener {
                     alertDialog.dismiss()
@@ -218,6 +222,7 @@ class AddEventActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PLACE_PICKER_REQUEST) {
+            progressBar.visibility = View.GONE
             if (resultCode == Activity.RESULT_OK) {
                 val place = PlacePicker.getPlace(data!!, this)
                 editTextEventAddress.setText(String.format(place.address.toString()))
@@ -295,34 +300,36 @@ class AddEventActivity : AppCompatActivity() {
 
 
     private fun uploadFoto(eventId: String?) {
-        val imageFile = File(imagePath)
+        if (imagePath != null) {
+            val imageFile = File(imagePath)
 
-        val compressedImage = Compressor(this)
-                .setMaxWidth(300)
-                .setMaxHeight(300)
-                .setQuality(50)
-                .compressToBitmap(imageFile)
+            val compressedImage = Compressor(this)
+                    .setMaxWidth(300)
+                    .setMaxHeight(300)
+                    .setQuality(50)
+                    .compressToBitmap(imageFile)
 
-        val baos = ByteArrayOutputStream()
-        compressedImage?.compress(Bitmap.CompressFormat.JPEG, 50, baos)
-        val data = baos.toByteArray()
+            val baos = ByteArrayOutputStream()
+            compressedImage?.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+            val data = baos.toByteArray()
 
-        val storageReference = FirebaseStorage.getInstance().reference
-        val filepath = storageReference.child("images/").child("$eventId.jpg")
+            val storageReference = FirebaseStorage.getInstance().reference
+            val filePath = storageReference.child("images/").child("$eventId.jpg")
 
-        val uploadTask = filepath.putBytes(data)
-        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let {
-                    throw it
+            val uploadTask = filePath.putBytes(data)
+            uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
                 }
-            }
-            return@Continuation filepath.downloadUrl
-        }).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val downloadUri = task.result
-                mDatabaseReference?.child(CHILD_EVENTS)?.child(eventId.toString())?.child("photoUrl")?.setValue(downloadUri.toString())
-            } else {
+                return@Continuation filePath.downloadUrl
+            }).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    mDatabaseReference?.child(CHILD_EVENTS)?.child(eventId.toString())?.child("photoUrl")?.setValue(downloadUri.toString())
+                } else {
+                }
             }
         }
     }

@@ -26,4 +26,22 @@
         <item name="android:textSize">0sp</item>
     </style>
 
+    <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">
+            @style/Widget.AppCompat.Button.Borderless.Colored
+        </item>
+        <item name="colorAccent">#FFAB40</item>
+    </style>
+
+    <style name="ColorSwitchStyle">
+        <item name="colorControlActivated">@color/md_white_1000</item>
+        <item name="colorAccent">@color/md_white_1000</item>
+        <item name="colorControlHighlight">@color/md_white_1000</item>
+    </style>
+
+    <style name="ediTextStyle">
+        <item name="colorControlNormal">#B0B0B0</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
 </resources>

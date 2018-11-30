@@ -15,6 +15,7 @@ import com.lmntrx.android.library.livin.missme.ProgressDialog
 import id.hobipedia.hobipedia.R
 import id.hobipedia.hobipedia.model.User
 import id.hobipedia.hobipedia.util.Constant
+import id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET
 import id.hobipedia.hobipedia.util.PreferenceHelper
 import id.hobipedia.hobipedia.util.PreferenceHelper.set
 import kotlinx.android.synthetic.main.activity_register.*
@@ -42,6 +43,8 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         textViewLogin.setOnClickListener {
+            if (mAuth.currentUser != null)
+                FirebaseAuth.getInstance().signOut()
             finish()
         }
     }
@@ -70,8 +73,9 @@ class RegisterActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 toast("Register berhasil")
                 val userId = mAuth.currentUser!!.uid
-                val alamat = Constant.DEFAULT.DEFAULT_NOT_SET
-                val newUser = User(userId, nama, email, alamat)
+                val alamat = DEFAULT_NOT_SET
+                val photoUrl = DEFAULT_NOT_SET
+                val newUser = User(userId, nama, email, alamat, photoUrl)
 
                 // send user data to firebase database
                 mUserRef.child(userId).setValue(newUser).addOnCompleteListener {
@@ -81,14 +85,9 @@ class RegisterActivity : AppCompatActivity() {
 
                     prefs["nama"] = nama
                     prefs["email"] = email
-                    prefs["noTelp"] = alamat
+                    prefs["alamat"] = alamat
+                    prefs["photoUrl"] = photoUrl
 
-//                    mAuth.signOut()
-//
-//                    val intent = Intent(this, LoginActivity::class.java)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                    startActivity(intent)
-//                    finish()
                     sendEmailVerification()
                     FirebaseAuth.getInstance().signOut()
                 }

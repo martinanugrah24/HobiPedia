@@ -6,15 +6,17 @@ public class User {
     private String nama;
     private String email;
     private String alamat;
+    private String photoUrl;
 
     public User() {
     }
 
-    public User(String userId, String nama, String email, String alamat) {
+    public User(String userId, String nama, String email, String alamat, String photoUrl) {
         this.userId = userId;
         this.nama = nama;
         this.email = email;
         this.alamat = alamat;
+        this.photoUrl = photoUrl;
     }
 
     public String getUserId() {
@@ -47,5 +49,13 @@ public class User {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

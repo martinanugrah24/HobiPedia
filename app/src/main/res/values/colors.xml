@@ -5,6 +5,9 @@
     <color name="colorAccent">#FFB42E</color>
 
     <color name="colorDivider">@color/md_grey_300</color>
+    <color name="divider_grey">#EBEBEB</color>
+
+    <color name="primaryBlack">#CC000000</color>
 
     <!-- google's material design colours from
 http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->

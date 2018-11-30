@@ -37,7 +37,7 @@
             android:drawableStart="@drawable/ic_perm_identity_24px"
             android:drawablePadding="17dp"
             android:hint="@string/nama_lengkap"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:paddingStart="20dp"
             android:paddingTop="8dp"
             android:paddingEnd="18dp"

@@ -39,10 +39,12 @@ class CategoryAdapter(
         }
 
         holder.joinButton.setOnClickListener {
-            listener.onItemClick(item.eventId)
+            listener.onItemClick(item.eventId, item.name, item.latitude, item.longitude)
         }
 
-        holder.cardView.setOnClickListener({ listener.onItemClick(item.eventId) })
+        holder.detailButton.setOnClickListener {
+            listener.onItemClick(item.eventId, item.name, item.latitude, item.longitude)
+        }
 
     }
 
@@ -58,7 +60,7 @@ class CategoryAdapter(
         val descriptionTextView: TextView
         val thumbnailImageView: ImageView
         val joinButton: Button
-//        val detail: TextView
+        val detailButton: Button
 
         // MARK: - Initialization
         init {
@@ -67,7 +69,7 @@ class CategoryAdapter(
             descriptionTextView = itemView.findViewById(R.id.textViewDescription) as TextView
             thumbnailImageView = itemView.findViewById(R.id.imageViewThumbnail) as ImageView
             joinButton = itemView.findViewById(R.id.buttonJoin) as Button
-
+            detailButton = itemView.findViewById(R.id.buttonDetail) as Button
         }
 
     }
