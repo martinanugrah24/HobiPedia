@@ -75,7 +75,7 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                progressBar.visibility = View.GONE
+                progressBar?.let{it.visibility = View.GONE}
                 profile_container?.let { it.visibility = View.VISIBLE }
                 val user = p0.getValue(User::class.java)
                 val nama = user?.nama

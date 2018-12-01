@@ -126,6 +126,7 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         intent.putExtra("lng", lng)
         startActivity(intent)
         toast("Berhasil join")
+        finish()
     }
 
     private fun navigateToAddEventActivity(categoryName: String) {
@@ -152,7 +153,7 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase?.getReference()
+        mDatabaseReference = mFirebaseDatabase?.reference
     }
 
     private var mEvents = arrayListOf<Event>()
