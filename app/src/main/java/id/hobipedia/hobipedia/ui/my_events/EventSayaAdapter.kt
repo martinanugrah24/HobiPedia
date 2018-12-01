@@ -49,6 +49,7 @@ class EventSayaAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
             intent.putExtra(Constant.KEY.KEY_ID_EVENT, item.eventId)
             intent.putExtra("lat", item.latitude)
             intent.putExtra("lng", item.longitude)
+            intent.putExtra("my_event", true)
             mContext.startActivity(intent)
         }
 

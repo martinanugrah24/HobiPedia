@@ -14,7 +14,7 @@ import id.hobipedia.hobipedia.ui.event_detail.EventDetailActivity
 import id.hobipedia.hobipedia.util.Constant
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_ID_EVENT
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_NAMA_EVENT
-import kotlinx.android.synthetic.main.item_event_saya.view.*
+import kotlinx.android.synthetic.main.item_event_lain.view.*
 
 class EventLainAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
     : RecyclerView.Adapter<EventLainAdapter.MyViewHolder>() {
@@ -49,6 +49,7 @@ class EventLainAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
             intent.putExtra(Constant.KEY.KEY_ID_EVENT, item.eventId)
             intent.putExtra("lat", item.latitude)
             intent.putExtra("lng", item.longitude)
+            intent.putExtra("my_event", false)
             mContext.startActivity(intent)
         }
 

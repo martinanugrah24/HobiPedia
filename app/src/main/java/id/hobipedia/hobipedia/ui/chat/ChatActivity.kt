@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -14,9 +15,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import id.hobipedia.hobipedia.R
 import id.hobipedia.hobipedia.extension.toast
+import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.model.GroupChat
 import id.hobipedia.hobipedia.model.Message
 import id.hobipedia.hobipedia.model.User
+import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_USERS
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_ID_EVENT
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_NAMA_EVENT
@@ -31,6 +34,7 @@ class ChatActivity : AppCompatActivity() {
 
     private var mExtras: Bundle? = null
     private var mEventId: String? = null
+    private var mIsMyEvent: Boolean? = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +46,9 @@ class ChatActivity : AppCompatActivity() {
         mExtras = intent.extras
         mEventId = mExtras?.getString(KEY_ID_EVENT)
         title = mExtras?.getString(KEY_NAMA_EVENT)
+        mIsMyEvent = mExtras?.getBoolean("my_event")
+
+        invalidateOptionsMenu()
 
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://hobipedia-b161b.firebaseio.com/groupChat/")
         databaseRef?.keepSynced(true)
@@ -132,8 +139,22 @@ class ChatActivity : AppCompatActivity() {
 
                                 override fun onDataChange(p0: DataSnapshot) {
                                     val user = p0.getValue(User::class.java)
-                                    addMessageBox("${user?.nama}:-\n${message.message}", 2)
-                                    Log.d("DEBUG_4", message.message.toString())
+                                    FirebaseDatabase.getInstance().reference.child(CHILD_EVENTS).child(eventId).addValueEventListener(object : ValueEventListener {
+                                        override fun onCancelled(p0: DatabaseError) {
+                                        }
+
+                                        override fun onDataChange(p0: DataSnapshot) {
+                                            val event = p0.getValue(Event::class.java)
+                                            if (event?.ownerId == user?.userId) {
+                                                addMessageBox("${user?.nama} (Admin):-\n${message.message}", 2)
+                                                Log.d("DEBUG_4", message.message.toString())
+                                            } else {
+                                                addMessageBox("${user?.nama}:-\n${message.message}", 2)
+                                                Log.d("DEBUG_5", message.message.toString())
+                                            }
+                                        }
+
+                                    })
                                 }
 
                             })
@@ -181,7 +202,39 @@ class ChatActivity : AppCompatActivity() {
                 finish()
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            R.id.menu_keluar -> {
+                exitGroup()
+                finish()
+                return true
+            }
         }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun exitGroup() {
+        FirebaseDatabase.getInstance().reference.child(CHILD_EVENTS).child(mEventId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val event = p0.getValue(Event::class.java)
+                val members = event?.members
+                if (members?.contains(FirebaseAuth.getInstance().currentUser?.uid)!!) {
+                    members.remove(FirebaseAuth.getInstance().currentUser?.uid)
+                    FirebaseDatabase.getInstance().reference.child(CHILD_EVENTS).child(mEventId!!).child("members").setValue(members)
+                }
+            }
+
+        })
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_chat, menu)
+        val item = menu?.findItem(R.id.menu_keluar)
+        item?.isVisible = !mIsMyEvent!!
+        return true
     }
 }

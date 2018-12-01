@@ -14,11 +14,11 @@ import com.google.firebase.database.ValueEventListener
 import id.hobipedia.hobipedia.R
 import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
-import kotlinx.android.synthetic.main.fragment_event_saya.*
+import kotlinx.android.synthetic.main.fragment_event_lain.*
 
 class EventLainFragment : android.support.v4.app.Fragment() {
 
-    lateinit var mAdapter: EventSayaAdapter
+    lateinit var mAdapter: EventLainAdapter
     lateinit var mEvents: ArrayList<Event>
 
     lateinit var mStatusTextView: TextView
@@ -33,6 +33,12 @@ class EventLainFragment : android.support.v4.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fetchEvent()
+
+    }
+
+
+    private fun fetchEvent() {
         mEvents = arrayListOf()
 
         setupRecyclerView()
@@ -66,7 +72,6 @@ class EventLainFragment : android.support.v4.app.Fragment() {
                 mAdapter.notifyDataSetChanged()
             }
         })
-
     }
 
 
@@ -75,8 +80,15 @@ class EventLainFragment : android.support.v4.app.Fragment() {
         layoutManager.stackFromEnd = true
         layoutManager.reverseLayout = true
         recyclerView.layoutManager = layoutManager
-        mAdapter = EventSayaAdapter(mEvents, context!!)
+        mAdapter = EventLainAdapter(mEvents, context!!)
         recyclerView.adapter = mAdapter
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        mEvents.clear()
+        fetchEvent()
     }
 
 }
