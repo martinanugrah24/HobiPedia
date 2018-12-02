@@ -58,9 +58,9 @@ class EventSayaFragment : android.support.v4.app.Fragment() {
                 }
 
                 if (mEvents.isNotEmpty()) {
-                    mStatusTextView!!.visibility = View.GONE
+                    mStatusTextView.visibility = View.GONE
                 } else {
-                    mStatusTextView!!.visibility = View.VISIBLE
+                    mStatusTextView.visibility = View.VISIBLE
                 }
 
                 mAdapter.notifyDataSetChanged()
