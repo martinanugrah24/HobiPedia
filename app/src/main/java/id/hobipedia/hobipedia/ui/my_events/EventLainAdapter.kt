@@ -60,6 +60,7 @@ class EventLainAdapter(val listPesanan: ArrayList<Event>, val mContext: Context)
             intent.putExtra(KEY_ID_EVENT, item.eventId)
             intent.putExtra("lat", item.latitude)
             intent.putExtra("lng", item.longitude)
+            intent.putExtra("is_join", true)
             mContext.startActivity(intent)
         }
 

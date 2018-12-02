@@ -141,7 +141,14 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         intent.putExtra(KEY_NAMA_EVENT, eventName)
         intent.putExtra("lat", lat)
         intent.putExtra("lng", lng)
-        startActivity(intent)
+        startActivityForResult(intent, 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            finish()
+        }
     }
 
     private var mFirebaseAuth: FirebaseAuth? = null

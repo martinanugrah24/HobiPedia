@@ -1,8 +1,10 @@
 package id.hobipedia.hobipedia.ui.event_detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -13,14 +15,18 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import id.hobipedia.hobipedia.R
+import id.hobipedia.hobipedia.extension.toast
 import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.model.User
+import id.hobipedia.hobipedia.ui.chat.ChatActivity
+import id.hobipedia.hobipedia.util.Constant
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_USERS
 import id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_ID_EVENT
 import id.hobipedia.hobipedia.util.Constant.KEY.KEY_NAMA_EVENT
 import kotlinx.android.synthetic.main.activity_event_detail.*
+import java.util.HashMap
 
 class EventDetailActivity : AppCompatActivity() {
 
@@ -54,6 +60,10 @@ class EventDetailActivity : AppCompatActivity() {
 
         mEventId = mExtras?.getString(KEY_ID_EVENT)
 
+        if (mExtras?.getBoolean("is_join")!!) {
+            buttonSubmit.visibility = View.GONE
+        }
+
         if (mEventId != null) {
             fetchEvent(mEventId!!)
             mapFragment.getMapAsync {
@@ -64,7 +74,31 @@ class EventDetailActivity : AppCompatActivity() {
                 mMap.addMarker(MarkerOptions().position(location).title("Marker in Location"))
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
             }
+            buttonSubmit.setOnClickListener {
+                var count: Int
+                val map = HashMap<String, Any?>()
+                mDatabaseReference?.child(CHILD_EVENTS)?.child(mEventId!!)?.child("members")?.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        count = (p0.childrenCount - 1).toInt().inc()
+                        map.put(count.toString(), mFirebaseAuth?.currentUser?.uid)
+                        mDatabaseReference?.child(CHILD_EVENTS)?.child(mEventId!!)?.child("members")?.updateChildren(map)
+                    }
+
+                })
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.putExtra(KEY_ID_EVENT, mEventId!!)
+                intent.putExtra(KEY_NAMA_EVENT, textViewEventName.text)
+                intent.putExtra("lat", mExtras?.getDouble("lat"))
+                intent.putExtra("lng", mExtras?.getDouble("lng"))
+                startActivity(intent)
+                toast("Berhasil join")
+                finish()
+            }
         }
+
     }
 
 
