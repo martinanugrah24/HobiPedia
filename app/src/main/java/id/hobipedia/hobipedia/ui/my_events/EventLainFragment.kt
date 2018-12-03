@@ -12,14 +12,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import id.hobipedia.hobipedia.R
+import id.hobipedia.hobipedia.extension.toast
 import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
 import kotlinx.android.synthetic.main.fragment_event_lain.*
+import id.hobipedia.hobipedia.util.NetworkAvailable
 
 class EventLainFragment : android.support.v4.app.Fragment() {
 
     lateinit var mAdapter: EventLainAdapter
-    lateinit var mEvents: ArrayList<Event>
+    var mEvents: ArrayList<Event>? = null
 
     lateinit var mStatusTextView: TextView
 
@@ -33,7 +35,14 @@ class EventLainFragment : android.support.v4.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchEvent()
+        if (NetworkAvailable.isNetworkAvailable(context!!)) {
+            fetchEvent()
+        } else {
+            context!!.toast("Koneksi internet tidak tersedia")
+            progressBar.let {
+                it.visibility = View.GONE
+            }
+        }
 
     }
 
@@ -56,14 +65,14 @@ class EventLainFragment : android.support.v4.app.Fragment() {
 
             override fun onDataChange(p0: DataSnapshot) {
                 progressBar?.let { it.visibility = View.INVISIBLE }
-                mEvents.clear()
+                mEvents!!.clear()
                 for (data in p0.children) {
                     val event = data.getValue(Event::class.java)
                     if (event?.members?.contains(userId)!!)
-                        mEvents.add(event)
+                        mEvents!!.add(event)
                 }
 
-                if (mEvents.isNotEmpty() || !mEvents.isNullOrEmpty()) {
+                if (mEvents!!.isNotEmpty() || !mEvents.isNullOrEmpty()) {
                     statusTextView?.let { it.visibility = View.GONE }
                 } else {
                     statusTextView?.let { it.visibility = View.VISIBLE }
@@ -80,14 +89,16 @@ class EventLainFragment : android.support.v4.app.Fragment() {
         layoutManager.stackFromEnd = true
         layoutManager.reverseLayout = true
         recyclerView.layoutManager = layoutManager
-        mAdapter = EventLainAdapter(mEvents, context!!)
+        mAdapter = EventLainAdapter(mEvents!!, context!!)
         recyclerView.adapter = mAdapter
     }
 
 
     override fun onResume() {
         super.onResume()
-        mEvents.clear()
+        if (mEvents != null) {
+            mEvents!!.clear()
+        }
         fetchEvent()
     }
 

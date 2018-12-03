@@ -13,9 +13,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import id.hobipedia.hobipedia.R
+import id.hobipedia.hobipedia.extension.toast
 import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
 import kotlinx.android.synthetic.main.fragment_event_saya.*
+import id.hobipedia.hobipedia.util.NetworkAvailable
 
 class EventSayaFragment : android.support.v4.app.Fragment() {
 
@@ -34,6 +36,28 @@ class EventSayaFragment : android.support.v4.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (NetworkAvailable.isNetworkAvailable(context!!)) {
+            fetchEvent()
+        } else {
+            context!!.toast("Koneksi internet tidak tersedia")
+            progressBar.let {
+                it.visibility = View.GONE
+            }
+        }
+
+    }
+
+
+    private fun setupRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.stackFromEnd = true
+        layoutManager.reverseLayout = true
+        recyclerView.layoutManager = layoutManager
+        mAdapter = EventSayaAdapter(mEvents, context!!)
+        recyclerView.adapter = mAdapter
+    }
+
+    private fun fetchEvent() {
         mEvents = arrayListOf()
 
         setupRecyclerView()
@@ -66,17 +90,6 @@ class EventSayaFragment : android.support.v4.app.Fragment() {
                 mAdapter.notifyDataSetChanged()
             }
         })
-
-    }
-
-
-    private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        layoutManager.stackFromEnd = true
-        layoutManager.reverseLayout = true
-        recyclerView.layoutManager = layoutManager
-        mAdapter = EventSayaAdapter(mEvents, context!!)
-        recyclerView.adapter = mAdapter
     }
 
 }

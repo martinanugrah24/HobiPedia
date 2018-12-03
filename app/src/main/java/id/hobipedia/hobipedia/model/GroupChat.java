@@ -7,7 +7,7 @@ public class GroupChat {
 
     private String groupChatId = DEFAULT_NOT_SET;
     private String eventId = DEFAULT_NOT_SET;
-//    private int members = DEFAULT_NOT_SET_INT;
+    //    private int members = DEFAULT_NOT_SET_INT;
     private Message messages;
 
     public GroupChat() {

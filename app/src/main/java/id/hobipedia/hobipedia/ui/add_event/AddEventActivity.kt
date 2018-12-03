@@ -5,9 +5,11 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.ActionBar
@@ -22,8 +24,7 @@ import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.lmntrx.android.library.livin.missme.ProgressDialog
@@ -33,6 +34,7 @@ import id.hobipedia.hobipedia.model.Event
 import id.hobipedia.hobipedia.util.Constant
 import id.hobipedia.hobipedia.util.Constant.CHILD.CHILD_EVENTS
 import id.hobipedia.hobipedia.util.Constant.DEFAULT.DEFAULT_NOT_SET
+import id.hobipedia.hobipedia.util.NetworkAvailable
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_add_event.*
 import pl.aprilapps.easyphotopicker.DefaultCallback
@@ -48,7 +50,7 @@ class AddEventActivity : AppCompatActivity() {
     private var mActionBar: ActionBar? = null
     private lateinit var mProgressDialog: ProgressDialog
     private var mExtras: Bundle? = null
-    private lateinit var alertDialog: AlertDialog
+    private var alertDialog: AlertDialog? = null
 
     private var mCategoryName: String? = null
 
@@ -87,13 +89,40 @@ class AddEventActivity : AppCompatActivity() {
         }
 
         buttonSubmit.setOnClickListener {
-            validateForm(mCategoryName!!)
+            //            val mRef = FirebaseDatabase.getInstance().getReference(".info/connected")
+//            mRef.addValueEventListener(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError) {
+//                    toast(p0.message)
+//                }
+//
+//                override fun onDataChange(p0: DataSnapshot) {
+//                    val connected = p0.getValue(Boolean::class.java)
+//                    if (connected!!) {
+//                        validateForm(mCategoryName!!)
+//                    } else {
+//                        toast("Koneksi internet tidak tersedia")
+//                    }
+//                }
+//
+//            })
+            if (NetworkAvailable.isNetworkAvailable(this)) {
+                validateForm(mCategoryName!!)
+            } else {
+                toast("Koneksi internet tidak tersedia")
+            }
         }
 
         editTextEventAddress.setOnClickListener {
             progressBar.visibility = View.VISIBLE
-            PLACE_PICKER_REQUEST = 1
-            showPlacePicker()
+            if (NetworkAvailable.isNetworkAvailable(this)) {
+                PLACE_PICKER_REQUEST = 1
+                showPlacePicker()
+            } else {
+                toast("Koneksi internet tidak tersedia")
+                progressBar.let {
+                    it.visibility = View.GONE
+                }
+            }
         }
 
         editTextEventDate.setOnClickListener {
@@ -143,7 +172,13 @@ class AddEventActivity : AppCompatActivity() {
         val eventMinMember = editTextEventMinMember.text.toString()
 
         if (inputNotEmpty(eventName, eventAddress, eventDescription, eventPhoneNumber, eventDate, eventTime, eventMaxMember, eventMinMember)) {
-            uploadEvent(eventAddress, categoryName, eventDescription, eventId, eventName, eventPhoneNumber, eventDate, eventTime, eventMaxMember, eventMinMember)
+            if (!TextUtils.isEmpty(eventMaxMember) || !TextUtils.isEmpty(eventMinMember)) {
+                if (eventMinMember.toInt() > eventMaxMember.toInt()) {
+                    toast("Minimal anggota harus lebih kecil/sama dengan maksimal anggota")
+                } else {
+                    uploadEvent(eventAddress, categoryName, eventDescription, eventId, eventName, eventPhoneNumber, eventDate, eventTime, eventMaxMember, eventMinMember)
+                }
+            }
         } else {
             if (TextUtils.isEmpty(eventName)) {
                 textInputLayoutEventName.error = "Mohon masukkan nama event"
@@ -201,12 +236,12 @@ class AddEventActivity : AppCompatActivity() {
         val event = Event(eventAddress, categoryName, eventDescription, eventId, mLatitude, mLongitude, eventName, mFirebaseUser!!.uid, eventPhoneNumber, DEFAULT_NOT_SET, eventDate, eventTime, eventMaxMember.toInt(), eventMinMember.toInt(), null)
         mDatabaseReference?.child(CHILD_EVENTS)?.child(eventId.toString())?.setValue(event)
                 ?.addOnSuccessListener {
-                    alertDialog.dismiss()
+                    alertDialog?.dismiss()
                     toast("Upload berhasil")
                     finish()
                 }
                 ?.addOnFailureListener {
-                    alertDialog.dismiss()
+                    alertDialog?.dismiss()
                     toast("Upload gagal")
                 }
         uploadFoto(eventId!!)
@@ -215,7 +250,7 @@ class AddEventActivity : AppCompatActivity() {
 
     private fun showPlacePicker() {
         val builder = PlacePicker.IntentBuilder()
-        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST)
+        startActivityForResult(builder.build(this@AddEventActivity), PLACE_PICKER_REQUEST)
     }
 
 
@@ -295,7 +330,20 @@ class AddEventActivity : AppCompatActivity() {
         dialogBuilder.setView(dialogView)
         dialogBuilder.setCancelable(false)
         alertDialog = dialogBuilder.create()
-        alertDialog.show()
+        alertDialog!!.show()
+    }
+
+
+    private fun dismissProgressDialog() {
+        if (alertDialog != null && alertDialog!!.isShowing) {
+            alertDialog!!.dismiss();
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dismissProgressDialog()
     }
 
 

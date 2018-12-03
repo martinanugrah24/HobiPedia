@@ -20,6 +20,7 @@ import id.hobipedia.hobipedia.util.Constant.CHILD.*
 import id.hobipedia.hobipedia.util.Constant.KEY.*
 import kotlinx.android.synthetic.main.activity_category.*
 import id.hobipedia.hobipedia.ui.chat.ChatActivity
+import id.hobipedia.hobipedia.util.NetworkAvailable
 import java.util.HashMap
 
 class CategoryActivity : AppCompatActivity(), CategoryListener {
@@ -46,7 +47,15 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         mActionBar?.title = mCategory?.name
 
         setupRecyclerView()
-        fetchEvents(mCategory?.name!!)
+
+        if (NetworkAvailable.isNetworkAvailable(this)) {
+            fetchEvents(mCategory?.name!!)
+        } else {
+            toast("Koneksi internet tidak tersedia")
+            progressBar.let {
+                it.visibility = View.GONE
+            }
+        }
 
         floatingActionButton.setOnClickListener {
             navigateToAddEventActivity(mCategory?.name!!)
@@ -191,6 +200,11 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
                 }
             }
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        recreate()
     }
 
 }
