@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constraintLayout"
     android:background="@drawable/gradient_background_selector"
     tools:context=".ui.RegisterActivity">
 
@@ -137,7 +137,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
-
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
@@ -167,7 +166,5 @@
             android:text="Login"
             android:textColor="@color/colorAccent"
             tools:ignore="HardcodedText" />
-
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

@@ -34,13 +34,9 @@ import pl.aprilapps.easyphotopicker.EasyImage
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-
 class ProfileFragment : Fragment() {
-
     private var profilChanged = false
-
     lateinit var alertDialog: AlertDialog
-
     private var imagePath: String? = null
     private var imageUri: Uri? = null
 
@@ -52,9 +48,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         profile_container?.let { it.visibility = View.GONE }
-
         keluarBtn.setOnClickListener {
             context?.toast("Logout")
             FirebaseAuth.getInstance().signOut()
@@ -68,25 +62,21 @@ class ProfileFragment : Fragment() {
 
         val userRef = FirebaseDatabase.getInstance().reference.child(CHILD_USERS)
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-
         userRef.child(userId!!).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                progressBar?.let{it.visibility = View.GONE}
+                progressBar?.let { it.visibility = View.GONE }
                 profile_container?.let { it.visibility = View.VISIBLE }
                 val user = p0.getValue(User::class.java)
                 val nama = user?.nama
                 val email = user?.email
                 val alamat = user?.alamat
                 val photoUrl = user?.photoUrl!!
-
                 nama_lengkap_et.setText(nama)
                 email_et.setText(email)
                 alamat_et.setText(alamat)
-
                 if (photoUrl != DEFAULT_NOT_SET) {
                     Glide.with(context!!)
                             .load(photoUrl)
@@ -94,10 +84,8 @@ class ProfileFragment : Fragment() {
                 } else {
                     image_profile.setBackgroundResource(R.drawable.ic_avatar)
                 }
-
             }
         })
-
         ubahBtn.setOnClickListener {
             if (!profilChanged) {
                 profilChanged = true
@@ -111,7 +99,6 @@ class ProfileFragment : Fragment() {
                 ubahBtn.text = "Ubah"
                 saveProfile()
             }
-
         }
     }
 
@@ -128,11 +115,9 @@ class ProfileFragment : Fragment() {
         val nama = nama_lengkap_et.text.toString().trim()
         val email = email_et.text.toString().trim()
         val alamat = alamat_et.text.toString().trim()
-
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         val mRef = FirebaseDatabase.getInstance().reference.child("users").child(userId!!)
         val newUserProfile = User(userId, nama, email, alamat, DEFAULT_NOT_SET)
-
         mRef.setValue(newUserProfile).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 alertDialog.dismiss()
@@ -142,7 +127,6 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
             }
         }
-
         nama_lengkap_et.isEnabled = false
         email_et.isEnabled = false
         alamat_et.isEnabled = false
@@ -151,20 +135,16 @@ class ProfileFragment : Fragment() {
     private fun uploadFoto() {
         if (imagePath != null) {
             val imageFile = File(imagePath)
-
             val compressedImage = Compressor(context)
                     .setMaxWidth(300)
                     .setMaxHeight(300)
                     .setQuality(50)
                     .compressToBitmap(imageFile)
-
             val baos = ByteArrayOutputStream()
             compressedImage?.compress(Bitmap.CompressFormat.JPEG, 50, baos)
             val data = baos.toByteArray()
-
             val storageReference = FirebaseStorage.getInstance().reference
             val filePath = storageReference.child("profiles/").child("${FirebaseAuth.getInstance().currentUser?.uid}.jpg")
-
             val uploadTask = filePath.putBytes(data)
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful) {
@@ -213,7 +193,6 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
-                // TODO: error handling
             }
 
             override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
@@ -226,5 +205,4 @@ class ProfileFragment : Fragment() {
             }
         })
     }
-
 }

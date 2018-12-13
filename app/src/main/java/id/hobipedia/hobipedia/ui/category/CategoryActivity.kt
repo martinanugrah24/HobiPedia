@@ -206,5 +206,4 @@ class CategoryActivity : AppCompatActivity(), CategoryListener {
         super.onPause()
         recreate()
     }
-
 }

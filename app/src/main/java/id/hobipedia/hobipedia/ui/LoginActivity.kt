@@ -20,26 +20,19 @@ import id.hobipedia.hobipedia.util.PreferenceHelper.set
 import kotlinx.android.synthetic.main.activity_login.*
 import id.hobipedia.hobipedia.util.Constant
 
-
 class LoginActivity : AppCompatActivity() {
-
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mProgressDialog: ProgressDialog
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         mAuth = FirebaseAuth.getInstance()
-
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("Silakan menunggu...")
         mProgressDialog.setCancelable(false)
-
         buttonLogin.setOnClickListener {
             loginUser()
         }
-
         textViewDaftar.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -89,13 +82,10 @@ class LoginActivity : AppCompatActivity() {
                 val nama = user?.nama
                 val email = user?.email
                 val alamat = user?.alamat
-
                 val prefs = PreferenceHelper.defaultPrefs(this@LoginActivity)
-
                 prefs["nama"] = nama
                 prefs["email"] = email
                 prefs["alamat"] = alamat
-
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
@@ -126,5 +116,4 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this@LoginActivity, "Email belum terverifikasi, silakan cek email Anda.", Toast.LENGTH_SHORT).show()
         }
     }
-
 }

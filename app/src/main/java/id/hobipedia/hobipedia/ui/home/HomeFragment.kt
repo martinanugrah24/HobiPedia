@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import id.hobipedia.hobipedia.util.SpacesItemDecoration
 
 class HomeFragment : Fragment(), HomeListener {
-
     private var mSampleImages = intArrayOf(
             R.drawable.iklan,
             R.drawable.iklan,
@@ -72,5 +71,4 @@ class HomeFragment : Fragment(), HomeListener {
         intent.putExtra(KEY_NAMA_CATEGORY, categoryName)
         startActivity(intent)
     }
-
 }

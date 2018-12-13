@@ -35,9 +35,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_category">
-
-            </android.support.v7.widget.RecyclerView>
+                tools:listitem="@layout/item_category" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -62,9 +60,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText" />
-
         </android.support.constraint.ConstraintLayout>
-
     </android.support.v4.widget.NestedScrollView>
-
 </RelativeLayout>

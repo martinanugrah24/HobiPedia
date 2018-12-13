@@ -21,27 +21,21 @@ import id.hobipedia.hobipedia.util.PreferenceHelper.set
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
-
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mUserRef: DatabaseReference
-
     private lateinit var mProgressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-
         mUserRef = FirebaseDatabase.getInstance().reference.child(Constant.CHILD.CHILD_USERS)
         mAuth = FirebaseAuth.getInstance()
-
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("Silakan Menunggu..")
         mProgressDialog.setCancelable(false)
-
         buttonRegister.setOnClickListener {
             validateForm()
         }
-
         textViewLogin.setOnClickListener {
             if (mAuth.currentUser != null)
                 FirebaseAuth.getInstance().signOut()
@@ -55,7 +49,6 @@ class RegisterActivity : AppCompatActivity() {
         val nama = editTextName.text.toString().trim()
         val password = editTextPassword.text.toString().trim()
         val confirmPassword = editTextConfirmPassword.text.toString().trim()
-
         if (inputNotEmpty(email, nama, password, confirmPassword)) {
             if (password.equals(confirmPassword)) {
                 registerUser(email, nama, password)
@@ -76,22 +69,17 @@ class RegisterActivity : AppCompatActivity() {
                 val alamat = DEFAULT_NOT_SET
                 val photoUrl = DEFAULT_NOT_SET
                 val newUser = User(userId, nama, email, alamat, photoUrl)
-
                 // send user data to firebase database
                 mUserRef.child(userId).setValue(newUser).addOnCompleteListener {
                     mProgressDialog.dismiss()
-
                     val prefs = PreferenceHelper.defaultPrefs(this)
-
                     prefs["nama"] = nama
                     prefs["email"] = email
                     prefs["alamat"] = alamat
                     prefs["photoUrl"] = photoUrl
-
                     sendEmailVerification()
                     FirebaseAuth.getInstance().signOut()
                 }
-
             } else {
                 mProgressDialog.dismiss()
                 val errorCode = (task.exception as FirebaseAuthException).errorCode
@@ -130,5 +118,4 @@ class RegisterActivity : AppCompatActivity() {
     private fun inputNotEmpty(email: String, nama: String, password: String, confirmPassword: String): Boolean {
         return !(TextUtils.isEmpty(email) || TextUtils.isEmpty(nama) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword))
     }
-
 }

@@ -38,9 +38,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:src="@drawable/ic_add" />
-
             </RelativeLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,7 +100,6 @@
                     app:theme="@style/ediTextStyle"
                     tools:text="-" />
 
-
                 <Button
                     android:id="@+id/ubahBtn"
                     android:layout_width="match_parent"
@@ -115,7 +112,6 @@
                     android:textAllCaps="false"
                     android:textColor="@color/md_white_1000"
                     android:textSize="15sp" />
-
             </LinearLayout>
 
             <Button
@@ -129,7 +125,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
                 android:textSize="15sp" />
-
         </LinearLayout>
     </ScrollView>
 
@@ -139,6 +134,4 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:foreground="?attr/selectableItemBackground" />
-
 </RelativeLayout>
-

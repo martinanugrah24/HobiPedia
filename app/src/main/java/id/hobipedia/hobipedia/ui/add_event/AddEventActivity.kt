@@ -44,34 +44,25 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AddEventActivity : AppCompatActivity() {
-
     private var mActionBar: ActionBar? = null
     private lateinit var mProgressDialog: ProgressDialog
     private var mExtras: Bundle? = null
     private var alertDialog: AlertDialog? = null
-
     private var mCategoryName: String? = null
-
     private var PLACE_PICKER_REQUEST = 0
     private var mLatitude: Double = 0.0
     private var mLongitude: Double = 0.0
-
     private var mDatePickerDialog: DatePickerDialog? = null
     private var mDate = ""
-
     private var mTimePickerDialog: TimePickerDialog? = null
     private var mTime = ""
-
     private var imagePath: String? = null
     private var imageUri: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
-
         setupFirebase()
         progressBar.visibility = View.GONE
         mActionBar = supportActionBar
@@ -79,32 +70,14 @@ class AddEventActivity : AppCompatActivity() {
         mExtras = intent.extras
         mCategoryName = mExtras?.getString(Constant.KEY.KEY_NAMA_CATEGORY)
         mActionBar?.title = "Buat Event: $mCategoryName"
-
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("Sedang mengupload..")
         mProgressDialog.setCancelable(false)
-
         imageViewUploadFoto.setOnClickListener {
             EasyImage.openChooserWithGallery(this, "Pilih Gambar", 0)
         }
 
         buttonSubmit.setOnClickListener {
-            //            val mRef = FirebaseDatabase.getInstance().getReference(".info/connected")
-//            mRef.addValueEventListener(object : ValueEventListener {
-//                override fun onCancelled(p0: DatabaseError) {
-//                    toast(p0.message)
-//                }
-//
-//                override fun onDataChange(p0: DataSnapshot) {
-//                    val connected = p0.getValue(Boolean::class.java)
-//                    if (connected!!) {
-//                        validateForm(mCategoryName!!)
-//                    } else {
-//                        toast("Koneksi internet tidak tersedia")
-//                    }
-//                }
-//
-//            })
             if (NetworkAvailable.isNetworkAvailable(this)) {
                 validateForm(mCategoryName!!)
             } else {
@@ -132,9 +105,7 @@ class AddEventActivity : AppCompatActivity() {
         editTextEventTime.setOnClickListener {
             showTimeDialog()
         }
-
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -145,7 +116,6 @@ class AddEventActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
@@ -159,7 +129,6 @@ class AddEventActivity : AppCompatActivity() {
         mDatabaseReference = mFirebaseDatabase?.reference
     }
 
-
     private fun validateForm(categoryName: String) {
         val eventId = mDatabaseReference!!.push().key
         val eventName = editTextEventName.text.toString().trim()
@@ -170,7 +139,6 @@ class AddEventActivity : AppCompatActivity() {
         val eventTime = editTextEventTime.text.toString().trim()
         val eventMaxMember = editTextEventMaxMember.text.toString()
         val eventMinMember = editTextEventMinMember.text.toString()
-
         if (inputNotEmpty(eventName, eventAddress, eventDescription, eventPhoneNumber, eventDate, eventTime, eventMaxMember, eventMinMember)) {
             if (!TextUtils.isEmpty(eventMaxMember) || !TextUtils.isEmpty(eventMinMember)) {
                 if (eventMinMember.toInt() > eventMaxMember.toInt()) {
@@ -228,7 +196,6 @@ class AddEventActivity : AppCompatActivity() {
         }
     }
 
-
     private fun uploadEvent(eventAddress: String, categoryName: String, eventDescription: String,
                             eventId: String?, eventName: String, eventPhoneNumber: String, eventDate: String,
                             eventTime: String, eventMaxMember: String, eventMinMember: String) {
@@ -247,12 +214,10 @@ class AddEventActivity : AppCompatActivity() {
         uploadFoto(eventId!!)
     }
 
-
     private fun showPlacePicker() {
         val builder = PlacePicker.IntentBuilder()
         startActivityForResult(builder.build(this@AddEventActivity), PLACE_PICKER_REQUEST)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -274,7 +239,6 @@ class AddEventActivity : AppCompatActivity() {
             }
 
             override fun onImagePickerError(e: Exception?, source: EasyImage.ImageSource?, type: Int) {
-                // TODO: error handling
             }
 
             override fun onCanceled(source: EasyImage.ImageSource?, type: Int) {
@@ -287,7 +251,6 @@ class AddEventActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun showDateDialog() {
         val newCalendar = Calendar.getInstance()
@@ -303,7 +266,6 @@ class AddEventActivity : AppCompatActivity() {
                 newCalendar.get(Calendar.DAY_OF_MONTH))
         mDatePickerDialog!!.show()
     }
-
 
     private fun showTimeDialog() {
         val mcurrentTime = Calendar.getInstance()
@@ -321,7 +283,6 @@ class AddEventActivity : AppCompatActivity() {
         mTimePickerDialog!!.show()
     }
 
-
     @SuppressLint("InflateParams")
     private fun showProgressDialog() {
         val dialogBuilder = AlertDialog.Builder(this)
@@ -333,24 +294,20 @@ class AddEventActivity : AppCompatActivity() {
         alertDialog!!.show()
     }
 
-
     private fun dismissProgressDialog() {
         if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.dismiss();
         }
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         dismissProgressDialog()
     }
 
-
     private fun uploadFoto(eventId: String?) {
         if (imagePath != null) {
             val imageFile = File(imagePath)
-
             val compressedImage = Compressor(this)
                     .setMaxWidth(300)
                     .setMaxHeight(300)
@@ -360,10 +317,8 @@ class AddEventActivity : AppCompatActivity() {
             val baos = ByteArrayOutputStream()
             compressedImage?.compress(Bitmap.CompressFormat.JPEG, 50, baos)
             val data = baos.toByteArray()
-
             val storageReference = FirebaseStorage.getInstance().reference
             val filePath = storageReference.child("images/").child("$eventId.jpg")
-
             val uploadTask = filePath.putBytes(data)
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful) {
@@ -381,7 +336,6 @@ class AddEventActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun inputNotEmpty(evetName: String, eventAddress: String, eventDescription: String,
                               phoneNumber: String, eventDate: String, eventTime: String,

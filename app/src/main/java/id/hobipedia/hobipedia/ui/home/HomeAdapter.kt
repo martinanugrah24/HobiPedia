@@ -34,7 +34,6 @@ class HomeAdapter(val items: ArrayList<Category>, val listener: HomeListener) : 
     }
 
     class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-
         // MARK: - Public Properties
         val cardView: CardView
         val imageView: ImageView
@@ -47,5 +46,4 @@ class HomeAdapter(val items: ArrayList<Category>, val listener: HomeListener) : 
             categoryTextView = itemView.findViewById(R.id.categoryTextView)
         }
     }
-
 }

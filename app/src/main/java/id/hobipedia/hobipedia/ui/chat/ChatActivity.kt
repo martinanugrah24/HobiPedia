@@ -26,41 +26,29 @@ import id.hobipedia.hobipedia.util.Constant.KEY.KEY_NAMA_EVENT
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.message_area.*
 
-
 @Suppress("NAME_SHADOWING")
 class ChatActivity : AppCompatActivity() {
-
     private var databaseRef: DatabaseReference? = null
-
     private var mExtras: Bundle? = null
     private var mEventId: String? = null
     private var mIsMyEvent: Boolean? = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         mExtras = intent.extras
         mEventId = mExtras?.getString(KEY_ID_EVENT)
         title = mExtras?.getString(KEY_NAMA_EVENT)
         mIsMyEvent = mExtras?.getBoolean("my_event")
-
         invalidateOptionsMenu()
-
         databaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://hobipedia-b161b.firebaseio.com/groupChat/")
         databaseRef?.keepSynced(true)
-
         fetchMessage(mEventId!!)
-
         sendButton.setOnClickListener {
             sendMessage()
         }
-
     }
-
 
     private fun sendMessage() {
         val messageText = messageArea.text.toString()
@@ -95,12 +83,10 @@ class ChatActivity : AppCompatActivity() {
                         databaseRef?.child(groupId!!)?.child("messages")?.child(messageId!!)?.setValue(message)
                     }
                 }
-
             })
             messageArea.setText("")
         }
     }
-
 
     private fun fetchMessage(eventId: String) {
         var groupChatId = ""
@@ -153,29 +139,18 @@ class ChatActivity : AppCompatActivity() {
                                                 Log.d("DEBUG_5", message.message.toString())
                                             }
                                         }
-
                                     })
                                 }
-
                             })
                         }
                     }
 
                     override fun onChildRemoved(p0: DataSnapshot) {
                     }
-
                 })
             }
-
         })
-
     }
-
-
-    private fun updateUI() {
-
-    }
-
 
     @SuppressLint("RtlHardcoded")
     fun addMessageBox(message: String, type: Int) {
@@ -195,7 +170,6 @@ class ChatActivity : AppCompatActivity() {
         scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -211,7 +185,6 @@ class ChatActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun exitGroup() {
         FirebaseDatabase.getInstance().reference.child(CHILD_EVENTS).child(mEventId!!).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -225,10 +198,8 @@ class ChatActivity : AppCompatActivity() {
                     FirebaseDatabase.getInstance().reference.child(CHILD_EVENTS).child(mEventId!!).child("members").setValue(members)
                 }
             }
-
         })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater

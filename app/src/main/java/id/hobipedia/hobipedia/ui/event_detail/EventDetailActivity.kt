@@ -33,37 +33,27 @@ class EventDetailActivity : AppCompatActivity() {
     private var mExtras: Bundle? = null
     private var mEventId: String? = null
     private var mEventName: String? = null
-
     private var mFirebaseAuth: FirebaseAuth? = null
     private var mFirebaseUser: FirebaseUser? = null
     private var mFirebaseDatabase: FirebaseDatabase? = null
     private var mDatabaseReference: DatabaseReference? = null
-
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
-
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-
         mExtras = intent?.extras
-
         mEventName = mExtras?.getString(KEY_NAMA_EVENT)
         collapse_toolbar.title = mEventName
-
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-
         setupFirebase()
-
         mEventId = mExtras?.getString(KEY_ID_EVENT)
-
         if (mExtras?.getBoolean("is_join")!!) {
             buttonSubmit.visibility = View.GONE
         }
-
         if (mEventId != null) {
             fetchEvent(mEventId!!)
             mapFragment.getMapAsync {
@@ -98,9 +88,7 @@ class EventDetailActivity : AppCompatActivity() {
                 finish()
             }
         }
-
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -112,7 +100,6 @@ class EventDetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun setupFirebase() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseUser = mFirebaseAuth?.currentUser
@@ -120,12 +107,10 @@ class EventDetailActivity : AppCompatActivity() {
         mDatabaseReference = mFirebaseDatabase?.reference
     }
 
-
     private fun fetchEvent(id: String) {
         mDatabaseReference?.child(CHILD_EVENTS)?.child(id)
                 ?.addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
-
                     }
 
                     override fun onDataChange(p0: DataSnapshot) {
@@ -147,15 +132,12 @@ class EventDetailActivity : AppCompatActivity() {
                             Picasso.get().load(firstPhotoUrl).into(imageViewEvent)
                         }
                     }
-
                 })
     }
-
 
     private fun fetchOwnerEvent(id: String) {
         mDatabaseReference?.child(CHILD_USERS)?.child(id)?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-
             }
 
             override fun onDataChange(p0: DataSnapshot) {
@@ -165,5 +147,4 @@ class EventDetailActivity : AppCompatActivity() {
 
         })
     }
-
 }
